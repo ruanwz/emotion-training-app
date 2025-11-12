@@ -1568,7 +1568,21 @@ const negativeEmotionScenarios = [
 ];
 
 function startEmotionRegulation() {
+    console.log('开始情绪调节训练');
+    console.log('negativeEmotionScenarios 数组:', typeof negativeEmotionScenarios);
+    console.log('数组长度:', negativeEmotionScenarios ? negativeEmotionScenarios.length : 'undefined');
+
+    if (!negativeEmotionScenarios || negativeEmotionScenarios.length === 0) {
+        console.error('negativeEmotionScenarios 未定义或为空');
+        showInlineMessage('情绪训练暂时不可用', 'error');
+        return;
+    }
+
     const scenario = negativeEmotionScenarios[Math.floor(Math.random() * negativeEmotionScenarios.length)];
+    console.log('选中的情景:', scenario);
+    console.log('情景属性:', Object.keys(scenario));
+    console.log('intensity 值:', scenario.intensity);
+
     emotionRegulationState.currentScenario = scenario;
     emotionRegulationState.currentEmotion = scenario.emotion;
 
@@ -1579,9 +1593,20 @@ function startEmotionRegulation() {
         'scared': '😰'
     };
 
-    document.getElementById('situationIcon').textContent = emotionIcons[scenario.emotion];
-    document.getElementById('situationText').textContent = scenario.text;
-    document.getElementById('emotionLevel').textContent = `情绪强度：${scenario.intensity}/10`;
+    // 安全检查
+    if (document.getElementById('situationIcon')) {
+        document.getElementById('situationIcon').textContent = emotionIcons[scenario.emotion];
+    }
+    if (document.getElementById('situationText')) {
+        document.getElementById('situationText').textContent = scenario.text;
+    }
+    if (document.getElementById('emotionLevel')) {
+        const intensityText = scenario.intensity !== undefined ? `${scenario.intensity}/10` : '未知/10';
+        document.getElementById('emotionLevel').textContent = `情绪强度：${intensityText}`;
+        console.log('设置的情绪强度文本:', `情绪强度：${intensityText}`);
+    } else {
+        console.error('找不到 emotionLevel 元素');
+    }
 
     showInlineMessage('选择一个方法来调节你的情绪', 'info');
 }
