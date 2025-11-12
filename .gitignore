@@ -1,0 +1,6 @@
+# Private directories
+adhd_child/
+.claude/
+
+# System files
+.DS_Store

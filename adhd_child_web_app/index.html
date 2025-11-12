@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宝宝的情绪小助手</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🌟 宝宝的情绪小助手</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="mainProgress"></div>
+                </div>
+                <div class="stars">
+                    <span>⭐</span><span class="star-count">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 欢迎页面 -->
+            <div class="screen welcome-screen active" id="welcomeScreen">
+                <div class="welcome-content">
+                    <div class="mascot">🐰</div>
+                    <h2>嗨，宝宝！我是你的情绪小助手</h2>
+                    <p>让我们一起学习如何控制情绪，成为更好的自己吧！</p>
+                    <div class="button-group">
+                        <button class="primary-btn" onclick="startDailyTraining()">
+                            🎯 开始今天的训练
+                        </button>
+                        <button class="secondary-btn" onclick="showScreen('scenarioScreen')">
+                            🎭 情景练习
+                        </button>
+                        <button class="secondary-btn" onclick="showScreen('breathingScreen')">
+                            🫁 深呼吸练习
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 每日训练页面 -->
+            <div class="screen daily-training-screen" id="dailyTrainingScreen">
+                <div class="training-content">
+                    <h2>每日情绪训练</h2>
+                    <div class="training-modules">
+                        <div class="module-card" onclick="startModule('attention')">
+                            <div class="module-icon">🎯</div>
+                            <h3>注意力训练</h3>
+                            <p>学习专注于老师和课堂内容</p>
+                            <div class="difficulty">⭐⭐</div>
+                        </div>
+
+                        <div class="module-card" onclick="startModule('emotion')">
+                            <div class="module-icon">😊</div>
+                            <h3>情绪管理</h3>
+                            <p>认识和控制自己的情绪</p>
+                            <div class="difficulty">⭐⭐⭐</div>
+                        </div>
+
+                        <div class="module-card" onclick="startModule('social')">
+                            <div class="module-icon">👥</div>
+                            <h3>社交技能</h3>
+                            <p>学习和朋友更好地相处</p>
+                            <div class="difficulty">⭐⭐⭐</div>
+                        </div>
+                    </div>
+
+                    <button class="back-btn" onclick="showScreen('welcomeScreen')">🏠 返回主页</button>
+                </div>
+            </div>
+
+            <!-- 情景模拟页面 -->
+            <div class="screen scenario-screen" id="scenarioScreen">
+                <div class="scenario-content">
+                    <h2>🎭 情景小剧场</h2>
+
+                    <div class="scenario-selector">
+                        <div class="scenario-card" onclick="startScenario('waterCup')">
+                            <div class="scenario-icon">💧</div>
+                            <h3>水杯被打翻了</h3>
+                            <p>当同学不小心打翻你的水杯时...</p>
+                        </div>
+
+                        <div class="scenario-card" onclick="startScenario('exclude')">
+                            <div class="scenario-icon">😔</div>
+                            <h3>朋友不和我玩</h3>
+                            <p>当感觉被朋友排除时...</p>
+                        </div>
+
+                        <div class="scenario-card" onclick="startScenario('boring')">
+                            <div class="scenario-icon">😴</div>
+                            <h3>上课好无聊</h3>
+                            <p>当上课觉得很无聊时...</p>
+                        </div>
+
+                        <div class="scenario-card" onclick="startScenario('ballGame')">
+                            <div class="scenario-icon">⚽</div>
+                            <h3>踢球冲突</h3>
+                            <p>当想和同学一起踢球时...</p>
+                        </div>
+                    </div>
+
+                    <button class="back-btn" onclick="showScreen('welcomeScreen')">🏠 返回主页</button>
+                </div>
+            </div>
+
+            <!-- 深呼吸页面 -->
+            <div class="screen breathing-screen" id="breathingScreen">
+                <div class="breathing-content">
+                    <h2>🫁 深呼吸练习</h2>
+                    <div class="breathing-circle" id="breathingCircle">
+                        <div class="circle-inner">
+                            <div class="breathing-text" id="breathingText">准备开始</div>
+                        </div>
+                    </div>
+                    <div class="breathing-instructions">
+                        <p>跟着圆圈一起深呼吸，让心情平静下来</p>
+                        <div class="breathing-steps">
+                            <div class="step">吸气 4 秒</div>
+                            <div class="step">保持 4 秒</div>
+                            <div class="step">呼气 4 秒</div>
+                        </div>
+                    </div>
+                    <div class="breathing-controls">
+                        <button class="primary-btn" onclick="startBreathing()">开始练习</button>
+                        <button class="secondary-btn" onclick="stopBreathing()">停止</button>
+                    </div>
+                    <button class="back-btn" onclick="showScreen('welcomeScreen')">🏠 返回主页</button>
+                </div>
+            </div>
+
+            <!-- 情景交互页面 -->
+            <div class="screen scenario-interaction-screen" id="scenarioInteractionScreen">
+                <div class="interaction-content">
+                    <div class="scenario-header">
+                        <h2 id="scenarioTitle">情景标题</h2>
+                        <div class="emotion-indicator" id="emotionIndicator">
+                            <span class="emotion-label">当前情绪：</span>
+                            <div class="emotion-options">
+                                <button class="emotion-btn calm" onclick="selectEmotion('calm')">😊 平静</button>
+                                <button class="emotion-btn angry" onclick="selectEmotion('angry')">😠 生气</button>
+                                <button class="emotion-btn sad" onclick="selectEmotion('sad')">😢 难过</button>
+                                <button class="emotion-btn excited" onclick="selectEmotion('excited')">😜 兴奋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scenario-scene">
+                        <div class="scene-illustration" id="sceneIllustration">
+                            <!-- 动态插图 -->
+                        </div>
+                        <div class="scene-description" id="sceneDescription">
+                            场景描述
+                        </div>
+                    </div>
+
+                    <div class="choices-container">
+                        <h3>你会怎么选择？</h3>
+                        <div class="choice-buttons" id="choiceButtons">
+                            <!-- 动态生成选择按钮 -->
+                        </div>
+                    </div>
+
+                    <div class="feedback-area" id="feedbackArea" style="display: none;">
+                        <div class="feedback-content">
+                            <h4 id="feedbackTitle">反馈标题</h4>
+                            <p id="feedbackText">反馈内容</p>
+                            <div class="feedback-star">⭐</div>
+                            <button class="next-btn" onclick="nextScenario()">下一个情景</button>
+                        </div>
+                    </div>
+
+                    <button class="back-btn" onclick="showScreen('scenarioScreen')">🏠 返回情景选择</button>
+                </div>
+            </div>
+
+            <!-- 注意力训练页面 -->
+            <div class="screen attention-training-screen" id="attentionTrainingScreen">
+                <div class="training-content">
+                    <h2>🎯 注意力训练</h2>
+                    <div class="training-intro">
+                        <p>让我们通过有趣的游戏来提升专注力！</p>
+                        <div class="difficulty-selector">
+                            <button class="difficulty-btn active" onclick="setDifficulty('easy')">简单</button>
+                            <button class="difficulty-btn" onclick="setDifficulty('medium')">中等</button>
+                            <button class="difficulty-btn" onclick="setDifficulty('hard')">困难</button>
+                        </div>
+                    </div>
+
+                    <!-- 记忆数字游戏 -->
+                    <div class="game-section" id="memoryGame">
+                        <h3>🔢 记忆数字</h3>
+                        <div class="game-display" id="memoryDisplay">
+                            <div class="memory-number" id="memoryNumber">准备开始...</div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startMemoryGame()">开始游戏</button>
+                            <div class="input-area" id="memoryInputArea" style="display: none;">
+                                <input type="text" id="memoryInput" placeholder="输入你记住的数字" maxlength="10">
+                                <button class="secondary-btn" onclick="checkMemoryAnswer()">提交答案</button>
+                            </div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">当前等级：</span>
+                                <span class="stat-value" id="memoryLevel">1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">连续正确：</span>
+                                <span class="stat-value" id="memoryStreak">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 找不同游戏 -->
+                    <div class="game-section" id="differenceGame">
+                        <h3>🔍 找找不同</h3>
+                        <div class="difference-display" id="differenceDisplay">
+                            <div class="difference-pair">
+                                <div class="pattern-grid" id="pattern1"></div>
+                                <div class="pattern-grid" id="pattern2"></div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startDifferenceGame()">开始游戏</button>
+                            <div class="input-area" id="differenceInputArea" style="display: none;">
+                                <p>点击右边图案中不同的格子</p>
+                            </div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">找到不同：</span>
+                                <span class="stat-value" id="differenceScore">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">用时：</span>
+                                <span class="stat-value" id="differenceTime">0秒</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 听觉专注游戏 -->
+                    <div class="game-section" id="auditoryGame">
+                        <h3>👂 听觉专注力</h3>
+                        <div class="auditory-display" id="auditoryDisplay">
+                            <div class="sound-sequence" id="soundSequence">
+                                <div class="sequence-placeholder" id="sequencePlaceholder">点击开始，听声音序列</div>
+                                <div class="sound-buttons" id="soundButtons" style="display: none;">
+                                    <button class="sound-btn" data-sound="1" onclick="playSoundAndRemember(1)">🔵</button>
+                                    <button class="sound-btn" data-sound="2" onclick="playSoundAndRemember(2)">🟢</button>
+                                    <button class="sound-btn" data-sound="3" onclick="playSoundAndRemember(3)">🔴</button>
+                                    <button class="sound-btn" data-sound="4" onclick="playSoundAndRemember(4)">🟡</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startAuditoryGame()">开始挑战</button>
+                            <button class="secondary-btn" onclick="playSequenceAgain()" id="replayBtn" style="display: none;">再听一遍</button>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">当前等级：</span>
+                                <span class="stat-value" id="auditoryLevel">1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">正确次数：</span>
+                                <span class="stat-value" id="auditoryCorrect">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 专注力维持游戏 -->
+                    <div class="game-section" id="sustainedAttentionGame">
+                        <h3>🎯 专注力维持</h3>
+                        <div class="sustained-display" id="sustainedDisplay">
+                            <div class="target-grid" id="targetGrid">
+                                <div class="instruction">找到所有的🎯目标，忽略干扰符号</div>
+                                <div class="game-grid" id="gameGrid" style="display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startSustainedAttention()">开始训练</button>
+                            <div class="timer-display" id="timerDisplay" style="display: none;">
+                                <span>剩余时间：<span id="timeRemaining">60</span>秒</span>
+                                <span>找到目标：<span id="targetsFound">0</span></span>
+                            </div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">准确率：</span>
+                                <span class="stat-value" id="accuracyRate">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">专注时间：</span>
+                                <span class="stat-value" id="focusTime">0秒</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 工作记忆游戏 -->
+                    <div class="game-section" id="workingMemoryGame">
+                        <h3>🧠 工作记忆训练</h3>
+                        <div class="working-memory-display" id="workingMemoryDisplay">
+                            <div class="memory-task" id="memoryTask">
+                                <div class="task-instruction">记住物品的顺序和位置</div>
+                                <div class="memory-grid" id="memoryGrid" style="display: none;"></div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startWorkingMemory()">开始记忆</button>
+                            <div class="recall-area" id="recallArea" style="display: none;">
+                                <p>按顺序点击你记住的物品</p>
+                            </div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">记忆长度：</span>
+                                <span class="stat-value" id="memoryLength">3</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">成功率：</span>
+                                <span class="stat-value" id="memorySuccess">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="back-btn" onclick="showScreen('dailyTrainingScreen')">🏠 返回训练</button>
+                </div>
+            </div>
+
+            <!-- 社交技能训练页面 -->
+            <div class="screen social-training-screen" id="socialTrainingScreen">
+                <div class="training-content">
+                    <h2>👥 社交技能训练</h2>
+                    <div class="training-intro">
+                        <p>学习如何更好地与朋友相处！</p>
+                    </div>
+
+                    <!-- 说话顺序练习 -->
+                    <div class="game-section" id="turnTakingGame">
+                        <h3>🗣️ 学习轮流说话</h3>
+                        <div class="conversation-scene">
+                            <div class="conversation-display" id="conversationDisplay">
+                                <div class="character student">
+                                    <div class="avatar">🧒</div>
+                                    <div class="speech-bubble" id="studentBubble">我想说...</div>
+                                </div>
+                                <div class="character friend">
+                                    <div class="avatar">👦</div>
+                                    <div class="speech-bubble" id="friendBubble">...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startTurnTaking()">开始练习</button>
+                            <div class="action-buttons" id="turnTakingActions" style="display: none;">
+                                <button class="action-btn" onclick="takeTurn()">轮到我说话</button>
+                                <button class="action-btn" onclick="listenCarefully()">认真倾听</button>
+                                <button class="action-btn" onclick="askQuestion()">提出问题</button>
+                            </div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">正确互动：</span>
+                                <span class="stat-value" id="turnTakingScore">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 情绪识别练习 -->
+                    <div class="game-section" id="emotionRecognitionGame">
+                        <h3>😊 识别他人情绪</h3>
+                        <div class="emotion-display">
+                            <div class="emotion-scenario" id="emotionScenario">
+                                <div class="scenario-character" id="scenarioCharacter">😊</div>
+                                <div class="scenario-text" id="scenarioText">情景描述</div>
+                            </div>
+                        </div>
+                        <div class="emotion-choices">
+                            <button class="emotion-choice-btn happy" onclick="selectEmotionChoice('happy')">😊 开心</button>
+                            <button class="emotion-choice-btn sad" onclick="selectEmotionChoice('sad')">😢 难过</button>
+                            <button class="emotion-choice-btn angry" onclick="selectEmotionChoice('angry')">😠 生气</button>
+                            <button class="emotion-choice-btn scared" onclick="selectEmotionChoice('scared')">😰 害怕</button>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startEmotionRecognition()">开始练习</button>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">正确识别：</span>
+                                <span class="stat-value" id="emotionScore">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 冲动控制练习 -->
+                    <div class="game-section" id="impulseControlGame">
+                        <h3>⏸️ 冲动控制训练</h3>
+                        <div class="impulse-display" id="impulseDisplay">
+                            <div class="waiting-game" id="waitingGame">
+                                <div class="instruction-text">看到绿灯立即点击，看到红灯要等待！</div>
+                                <div class="signal-area" id="signalArea">
+                                    <div class="traffic-signal" id="trafficSignal">🚦</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startImpulseControl()">开始训练</button>
+                            <div class="reaction-buttons" id="reactionButtons" style="display: none;">
+                                <button class="action-btn green" onclick="handleGreenLight()">点击绿灯</button>
+                                <button class="action-btn red" onclick="handleRedLight()">等待红灯</button>
+                            </div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">自控成功：</span>
+                                <span class="stat-value" id="selfControlScore">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">反应时间：</span>
+                                <span class="stat-value" id="reactionTime">0ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 课堂行为练习 -->
+                    <div class="game-section" id="classroomBehaviorGame">
+                        <h3>🏫 课堂行为训练</h3>
+                        <div class="classroom-display" id="classroomDisplay">
+                            <div class="classroom-scene" id="classroomScene">
+                                <div class="teacher-area">
+                                    <div class="teacher">👩‍🏫</div>
+                                    <div class="teacher-speech" id="teacherSpeech">同学们，请打开课本...</div>
+                                </div>
+                                <div class="student-area">
+                                    <div class="me">🧒</div>
+                                    <div class="classmates">👦👧👦👧</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="behavior-choices">
+                            <button class="behavior-btn good" onclick="chooseBehavior('listen')">认真听讲</button>
+                            <button class="behavior-btn good" onclick="chooseBehavior('participate')">举手回答</button>
+                            <button class="behavior-btn bad" onclick="chooseBehavior('disturb')">做小动作</button>
+                            <button class="behavior-btn bad" onclick="chooseBehavior('talk')">和同学说话</button>
+                            <button class="behavior-btn neutral" onclick="chooseBehavior('ask')">举手提问</button>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startClassroomTraining()">开始练习</button>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">正确行为：</span>
+                                <span class="stat-value" id="correctBehavior">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">专注时长：</span>
+                                <span class="stat-value" id="focusDuration">0分钟</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 情绪调节练习 -->
+                    <div class="game-section" id="emotionRegulationGame">
+                        <h3>😌 情绪调节训练</h3>
+                        <div class="emotion-regulation-display" id="emotionRegulationDisplay">
+                            <div class="emotion-trigger" id="emotionTrigger">
+                                <div class="trigger-scenario" id="triggerScenario">
+                                    <div class="situation-icon" id="situationIcon">😤</div>
+                                    <div class="situation-text" id="situationText">触发情绪的情景</div>
+                                </div>
+                                <div class="emotion-meter" id="emotionMeter">
+                                    <div class="emotion-level" id="emotionLevel">情绪强度：7/10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="regulation-strategies">
+                            <h4>选择调节策略：</h4>
+                            <button class="strategy-btn" onclick="useStrategy('breathing')">深呼吸</button>
+                            <button class="strategy-btn" onclick="useStrategy('counting')">数数到10</button>
+                            <button class="strategy-btn" onclick="useStrategy('thinking')">积极思考</button>
+                            <button class="strategy-btn" onclick="useStrategy('seeking')">寻求帮助</button>
+                            <button class="strategy-btn" onclick="useStrategy('distraction')">转移注意力</button>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startEmotionRegulation()">开始训练</button>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">调节成功：</span>
+                                <span class="stat-value" id="regulationSuccess">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">策略掌握：</span>
+                                <span class="stat-value" id="strategyMastery">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 同伴关系练习 -->
+                    <div class="game-section" id="peerRelationshipGame">
+                        <h3>🤝 同伴关系训练</h3>
+                        <div class="peer-display" id="peerDisplay">
+                            <div class="peer-scenario" id="peerScenario">
+                                <div class="peer-interaction">
+                                    <div class="friend-group">
+                                        <div class="friend">👦</div>
+                                        <div class="friend">👧</div>
+                                        <div class="friend">👦</div>
+                                    </div>
+                                    <div class="interaction-text" id="interactionText">同伴互动情景</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="peer-choices">
+                            <button class="peer-btn positive" onclick="handlePeerSituation('join')">主动加入</button>
+                            <button class="peer-btn positive" onclick="handlePeerSituation('invite')">邀请玩耍</button>
+                            <button class="peer-btn positive" onclick="handlePeerSituation('share')">分享物品</button>
+                            <button class="peer-btn negative" onclick="handlePeerSituation('force')">强行加入</button>
+                            <button class="peer-btn negative" onclick="handlePeerSituation('ignore')">忽略他人</button>
+                            <button class="peer-btn neutral" onclick="handlePeerSituation('observe')">先观察</button>
+                        </div>
+                        <div class="game-controls">
+                            <button class="primary-btn" onclick="startPeerTraining()">开始训练</button>
+                        </div>
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">积极互动：</span>
+                                <span class="stat-value" id="positiveInteraction">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">友谊指数：</span>
+                                <span class="stat-value" id="friendshipIndex">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="back-btn" onclick="showScreen('dailyTrainingScreen')">🏠 返回训练</button>
+                </div>
+            </div>
+
+            <!-- 奖励页面 -->
+            <div class="screen reward-screen" id="rewardScreen">
+                <div class="reward-content">
+                    <div class="celebration">🎉</div>
+                    <h2>太棒了！</h2>
+                    <div class="earned-stars">
+                        <p>你今天获得了 <span id="earnedStarsCount">3</span> 颗星星！</p>
+                        <div class="stars-display">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </div>
+                    <div class="achievement-summary">
+                        <h3>今日成就：</h3>
+                        <ul id="achievementList">
+                            <li>✅ 完成了情绪管理训练</li>
+                            <li>✅ 学会了控制冲动的方法</li>
+                            <li>✅ 懂得了寻求帮助的重要性</li>
+                        </ul>
+                    </div>
+                    <div class="button-group">
+                        <button class="primary-btn" onclick="showScreen('welcomeScreen')">继续努力</button>
+                        <button class="secondary-btn" onclick="shareProgress()">分享进步</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部奖励栏 -->
+        <footer class="footer">
+            <div class="reward-system">
+                <div class="current-level">
+                    <span class="level-badge">情绪小达人</span>
+                </div>
+                <div class="daily-progress">
+                    <span>今日进度：</span>
+                    <div class="mini-progress">
+                        <div class="mini-progress-fill" id="dailyProgress"></div>
+                    </div>
+                    <span id="progressPercent">0%</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
