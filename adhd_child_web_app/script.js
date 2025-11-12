@@ -1557,8 +1557,18 @@ let emotionRegulationState = {
     currentEmotion: null
 };
 
+// 只用于情绪调节的负面情绪情景
+const negativeEmotionScenarios = [
+    { emotion: 'sad', text: '小红的宠物狗走丢了', character: '😢', intensity: 9 },
+    { emotion: 'angry', text: '有人不小心把小华的作业弄湿了', character: '😠', intensity: 7 },
+    { emotion: 'scared', text: '小李晚上听到奇怪的声音', character: '😰', intensity: 6 },
+    { emotion: 'sad', text: '最好的朋友要搬家了', character: '😢', intensity: 8 },
+    { emotion: 'angry', text: '被同学冤枉了', character: '😠', intensity: 9 },
+    { emotion: 'scared', text: '要在全班同学面前演讲', character: '😰', intensity: 7 }
+];
+
 function startEmotionRegulation() {
-    const scenario = emotionScenarios[Math.floor(Math.random() * emotionScenarios.length)];
+    const scenario = negativeEmotionScenarios[Math.floor(Math.random() * negativeEmotionScenarios.length)];
     emotionRegulationState.currentScenario = scenario;
     emotionRegulationState.currentEmotion = scenario.emotion;
 
