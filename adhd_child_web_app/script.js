@@ -1549,7 +1549,7 @@ function updateClassroomStats() {
     document.getElementById('focusDuration').textContent = focusMinutes + '分钟';
 }
 
-// 情绪调节训练
+// 情绪调节训练 - 已修复 intensity undefined 问题
 let emotionRegulationState = {
     regulationSuccess: 0,
     strategyMastery: 0,
