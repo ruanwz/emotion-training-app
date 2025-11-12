@@ -822,14 +822,14 @@ let emotionGameState = {
 };
 
 const emotionScenarios = [
-    { emotion: 'happy', text: '小明收到了期待已久的生日礼物', character: '😊' },
-    { emotion: 'sad', text: '小红的宠物狗走丢了', character: '😢' },
-    { emotion: 'angry', text: '有人不小心把小华的作业弄湿了', character: '😠' },
-    { emotion: 'scared', text: '小李晚上听到奇怪的声音', character: '😰' },
-    { emotion: 'happy', text: '考试得了100分', character: '😊' },
-    { emotion: 'sad', text: '最好的朋友要搬家了', character: '😢' },
-    { emotion: 'angry', text: '被同学冤枉了', character: '😠' },
-    { emotion: 'scared', text: '要在全班同学面前演讲', character: '😰' }
+    { emotion: 'happy', text: '小明收到了期待已久的生日礼物', character: '😊', intensity: 8 },
+    { emotion: 'sad', text: '小红的宠物狗走丢了', character: '😢', intensity: 9 },
+    { emotion: 'angry', text: '有人不小心把小华的作业弄湿了', character: '😠', intensity: 7 },
+    { emotion: 'scared', text: '小李晚上听到奇怪的声音', character: '😰', intensity: 6 },
+    { emotion: 'happy', text: '考试得了100分', character: '😊', intensity: 9 },
+    { emotion: 'sad', text: '最好的朋友要搬家了', character: '😢', intensity: 8 },
+    { emotion: 'angry', text: '被同学冤枉了', character: '😠', intensity: 9 },
+    { emotion: 'scared', text: '要在全班同学面前演讲', character: '😰', intensity: 7 }
 ];
 
 function startEmotionRecognition() {
@@ -1570,7 +1570,7 @@ function startEmotionRegulation() {
     };
 
     document.getElementById('situationIcon').textContent = emotionIcons[scenario.emotion];
-    document.getElementById('situationText').textContent = scenario.situation;
+    document.getElementById('situationText').textContent = scenario.text;
     document.getElementById('emotionLevel').textContent = `情绪强度：${scenario.intensity}/10`;
 
     showInlineMessage('选择一个方法来调节你的情绪', 'info');
