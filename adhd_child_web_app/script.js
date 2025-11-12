@@ -1559,29 +1559,53 @@ let emotionRegulationState = {
 
 // 只用于情绪调节的负面情绪情景
 const negativeEmotionScenarios = [
-    { emotion: 'sad', text: '小红的宠物狗走丢了', character: '😢', intensity: 9 },
-    { emotion: 'angry', text: '有人不小心把小华的作业弄湿了', character: '😠', intensity: 7 },
-    { emotion: 'scared', text: '小李晚上听到奇怪的声音', character: '😰', intensity: 6 },
-    { emotion: 'sad', text: '最好的朋友要搬家了', character: '😢', intensity: 8 },
-    { emotion: 'angry', text: '被同学冤枉了', character: '😠', intensity: 9 },
-    { emotion: 'scared', text: '要在全班同学面前演讲', character: '😰', intensity: 7 }
+    {
+        emotion: 'sad',
+        text: '小红的宠物狗走丢了',
+        character: '😢',
+        intensity: 9,
+        bestStrategy: 'seeking' // 寻求帮助
+    },
+    {
+        emotion: 'angry',
+        text: '有人不小心把小华的作业弄湿了',
+        character: '😠',
+        intensity: 7,
+        bestStrategy: 'breathing' // 深呼吸
+    },
+    {
+        emotion: 'scared',
+        text: '小李晚上听到奇怪的声音',
+        character: '😰',
+        intensity: 6,
+        bestStrategy: 'thinking' // 积极思考
+    },
+    {
+        emotion: 'sad',
+        text: '最好的朋友要搬家了',
+        character: '😢',
+        intensity: 8,
+        bestStrategy: 'seeking' // 寻求帮助
+    },
+    {
+        emotion: 'angry',
+        text: '被同学冤枉了',
+        character: '😠',
+        intensity: 9,
+        bestStrategy: 'thinking' // 积极思考
+    },
+    {
+        emotion: 'scared',
+        text: '要在全班同学面前演讲',
+        character: '😰',
+        intensity: 7,
+        bestStrategy: 'breathing' // 深呼吸
+    }
 ];
 
 function startEmotionRegulation() {
-    console.log('开始情绪调节训练');
-    console.log('negativeEmotionScenarios 数组:', typeof negativeEmotionScenarios);
-    console.log('数组长度:', negativeEmotionScenarios ? negativeEmotionScenarios.length : 'undefined');
-
-    if (!negativeEmotionScenarios || negativeEmotionScenarios.length === 0) {
-        console.error('negativeEmotionScenarios 未定义或为空');
-        showInlineMessage('情绪训练暂时不可用', 'error');
-        return;
-    }
-
+    // 随机选择一个负面情绪情景
     const scenario = negativeEmotionScenarios[Math.floor(Math.random() * negativeEmotionScenarios.length)];
-    console.log('选中的情景:', scenario);
-    console.log('情景属性:', Object.keys(scenario));
-    console.log('intensity 值:', scenario.intensity);
 
     emotionRegulationState.currentScenario = scenario;
     emotionRegulationState.currentEmotion = scenario.emotion;
@@ -1593,20 +1617,9 @@ function startEmotionRegulation() {
         'scared': '😰'
     };
 
-    // 安全检查
-    if (document.getElementById('situationIcon')) {
-        document.getElementById('situationIcon').textContent = emotionIcons[scenario.emotion];
-    }
-    if (document.getElementById('situationText')) {
-        document.getElementById('situationText').textContent = scenario.text;
-    }
-    if (document.getElementById('emotionLevel')) {
-        const intensityText = scenario.intensity !== undefined ? `${scenario.intensity}/10` : '未知/10';
-        document.getElementById('emotionLevel').textContent = `情绪强度：${intensityText}`;
-        console.log('设置的情绪强度文本:', `情绪强度：${intensityText}`);
-    } else {
-        console.error('找不到 emotionLevel 元素');
-    }
+    document.getElementById('situationIcon').textContent = emotionIcons[scenario.emotion];
+    document.getElementById('situationText').textContent = scenario.text;
+    document.getElementById('emotionLevel').textContent = `情绪强度：${scenario.intensity}/10`;
 
     showInlineMessage('选择一个方法来调节你的情绪', 'info');
 }
@@ -1614,7 +1627,8 @@ function startEmotionRegulation() {
 function useStrategy(strategy) {
     if (!emotionRegulationState.currentScenario) return;
 
-    const bestStrategy = emotionRegulationState.currentScenario.bestStrategy;
+    const scenario = emotionRegulationState.currentScenario;
+    const bestStrategy = scenario.bestStrategy;
     const strategyNames = {
         'breathing': '深呼吸',
         'counting': '数数到10',
@@ -1623,16 +1637,47 @@ function useStrategy(strategy) {
         'distraction': '转移注意力'
     };
 
+    // 根据不同情绪类型提供针对性反馈
+    const feedbackMessages = {
+        'sad': {
+            'seeking': '很好！悲伤时寻求帮助是明智的选择',
+            'thinking': '积极思考有助于调整悲伤情绪',
+            'default': '悲伤时需要时间调整，试试其他方法'
+        },
+        'angry': {
+            'breathing': '非常好！深呼吸能帮助冷静下来',
+            'counting': '很好！数数可以帮助控制冲动',
+            'thinking': '积极思考有助于化解愤怒',
+            'default': '愤怒时需要冷静，继续尝试不同方法'
+        },
+        'scared': {
+            'breathing': '很好！深呼吸可以缓解紧张',
+            'thinking': '积极思考有助于克服恐惧',
+            'seeking': '寻求帮助是面对恐惧的好方法',
+            'default': '面对恐惧需要勇气，继续尝试'
+        }
+    };
+
     if (strategy === bestStrategy) {
         emotionRegulationState.regulationSuccess++;
         emotionRegulationState.strategyMastery++;
 
-        showInlineMessage(`太棒了！${strategyNames[strategy]}是很好的调节方法`, 'success');
+        const emotionFeedback = feedbackMessages[scenario.emotion];
+        const message = emotionFeedback && emotionFeedback[strategy]
+            ? emotionFeedback[strategy]
+            : `太棒了！${strategyNames[strategy]}是很好的调节方法`;
+
+        showInlineMessage(message, 'success');
 
         appState.addStars(3);
         appState.updateDailyProgress(12);
     } else {
-        showInlineMessage(`${strategyNames[strategy]}也是个好方法，但下次可以试试其他策略`, 'info');
+        const emotionFeedback = feedbackMessages[scenario.emotion];
+        const message = emotionFeedback && emotionFeedback[strategy]
+            ? emotionFeedback[strategy]
+            : `${strategyNames[strategy]}也是个好方法，但下次可以试试其他策略`;
+
+        showInlineMessage(message, 'info');
 
         appState.addStars(1);
         appState.updateDailyProgress(5);
